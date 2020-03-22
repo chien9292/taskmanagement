@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use App\User;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
@@ -17,7 +17,7 @@ class LoginController extends Controller
      * @param  App\Http\Requests\Auth\LoginRequest  $request
      * @return ResponseFactory->json()
      */
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request, User $userModel)
     {
         if (Auth::attempt([
             'email' => request('email'),
@@ -25,11 +25,14 @@ class LoginController extends Controller
         ])) {
             $user = Auth::user();
             $token = $user->createToken('task', [$user->role.''])->accessToken;
+            $userModel->update($request->all());
             return response()->json(
                 [
                     "message" => "success",
                     'token' => $token,
-                    'role' => consts('user.role.admin').''
+                    'role' => consts('user.role.admin').'',
+                    'id' => $user->id,
+                    'name' => $user->name
                 ]
             );
         } else {
@@ -47,8 +50,9 @@ class LoginController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return json
      */
-    public function logout()
+    public function logout(Request $request, User $user)
     {
+        $user->update($request->all());
         Auth::user()->token()->revoke();
         return response()->json([
             'code' => 200

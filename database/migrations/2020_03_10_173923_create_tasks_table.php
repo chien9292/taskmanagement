@@ -25,6 +25,7 @@ class CreateTasksTable extends Migration
             $table->unsignedBigInteger('assignee_id')->nullable();//The assignee of task
             $table->unsignedBigInteger('assigned_by')->nullable();//The assigner (Manager/Admin) of task
             $table->string('status')->nullable();//Status: Pending, Doing, Finished, Overdue...
+            $table->string('content')->nullable();//Content of task processing of assignee
             $table->string('fail_reason')->nullable();//Reason to doing task fail
             $table->string('committed_at')->nullable();//Datetime assignee committed
             $table->string('attached_file')->nullable();//Attached image when committing
@@ -34,6 +35,8 @@ class CreateTasksTable extends Migration
             $table->dateTime('commented_at')->nullable();//Datetime Manager/Admin commented
             $table->unsignedBigInteger('created_by');//created_by
             $table->unsignedBigInteger('updated_by');
+            $table->string('update_detail')->nullable();//Detail of updating
+            $table->string('push_token')->nullable();
             $table->timestamps();
 
             //Foreign key constrains
