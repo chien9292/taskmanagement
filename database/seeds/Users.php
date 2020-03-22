@@ -14,7 +14,7 @@ class Users extends Seeder
     {
         DB::table('users')->insert([
             'name'              => 'Tran Minh Chien',
-            'email'             => 'chientm@gmail.com',
+            'email'             => 'chientmse130681@fpt.edu.vn',
             'role'              => consts('user.role.admin'),
             'password'          => Hash::make('123456'),
             'created_at'        => now(),
@@ -32,6 +32,14 @@ class Users extends Seeder
             'name'              => 'Manager2',
             'email'             => 'manager2@gmail.com',
             'role'              => consts('user.role.manager'),
+            'password'          => Hash::make('123456'),
+            'created_at'        => now(),
+            'updated_at'        => now()
+        ]);
+        DB::table('users')->insert([
+            'name'              => 'Chien employee',
+            'email'             => 'ck.simple.1412@gmail.com',
+            'role'              => consts('user.role.user'),
             'password'          => Hash::make('123456'),
             'created_at'        => now(),
             'updated_at'        => now()
