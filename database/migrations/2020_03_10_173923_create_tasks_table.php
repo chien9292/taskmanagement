@@ -36,7 +36,6 @@ class CreateTasksTable extends Migration
             $table->unsignedBigInteger('created_by');//created_by
             $table->unsignedBigInteger('updated_by');
             $table->string('update_detail')->nullable();//Detail of updating
-            $table->string('push_token')->nullable();
             $table->timestamps();
 
             //Foreign key constrains

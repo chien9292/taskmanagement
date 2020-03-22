@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->softDeletes();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
+            $table->string('push_token')->nullable();//token to push notification
             $table->timestamps();
 
             //Foreign key constrains
