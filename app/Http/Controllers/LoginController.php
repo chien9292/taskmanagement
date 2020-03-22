@@ -24,8 +24,10 @@ class LoginController extends Controller
             'password' => request('password')
         ])) {
             $user = Auth::user();
+            //create access_token
             $token = $user->createToken('task', [$user->role.''])->accessToken;
-            $userModel->update($request->all());
+            //update push_token
+            $user->update($request->all());
             return response()->json(
                 [
                     "message" => "success",
