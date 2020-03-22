@@ -27,7 +27,7 @@ class LoginController extends Controller
             //create access_token
             $token = $user->createToken('task', [$user->role.''])->accessToken;
             //update push_token
-            $user->update($request->all());
+            $user->update(['push_token', $request->get('push_token')]);
             return response()->json(
                 [
                     "message" => "success",
