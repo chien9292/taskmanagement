@@ -16,19 +16,20 @@ class CreateTasksTable extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->string('approved_status')->nullable();
             $table->dateTime('approved_at')->nullable();//Datetime Manager/Admin approved the creation of task from user
             $table->unsignedBigInteger('approved_by')->nullable();//Manager/Admin approved the creation of task from user
             $table->unsignedBigInteger('old_id')->nullable();//If old, get old task id
-            $table->string('description');//Description of task
+            $table->text('description');//Description of task
             $table->dateTime('start')->nullable();//Start time in schedule
             $table->dateTime('end')->nullable();//End time in schedule(deadline)
             $table->unsignedBigInteger('assignee_id')->nullable();//The assignee of task
             $table->unsignedBigInteger('assigned_by')->nullable();//The assigner (Manager/Admin) of task
             $table->string('status')->nullable();//Status: Pending, Doing, Finished, Overdue...
-            $table->string('content')->nullable();//Content of task processing of assignee
+            $table->text('content')->nullable();//Content of task processing of assignee
             $table->string('fail_reason')->nullable();//Reason to doing task fail
             $table->string('committed_at')->nullable();//Datetime assignee committed
-            $table->string('attached_file')->nullable();//Attached image when committing
+            $table->text('attached_file')->nullable();//Attached image when committing
             $table->string('comment')->nullable();//Comment of Manager/Admin
             $table->string('mark')->nullable();//Mark given by Manager/Admin
             $table->unsignedBigInteger('commenter_id')->nullable();//Id of user who commentted
@@ -36,6 +37,7 @@ class CreateTasksTable extends Migration
             $table->unsignedBigInteger('created_by');//created_by
             $table->unsignedBigInteger('updated_by');
             $table->string('update_detail')->nullable();//Detail of updating
+            $table->softDeletes();
             $table->timestamps();
 
             //Foreign key constrains

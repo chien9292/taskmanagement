@@ -55,4 +55,12 @@ class User extends Authenticatable
         return $this->hasOne('App\Models\Group', 'manager_id');
     }
 
+    /**
+     * Get list tasks of a user
+     */
+    public function personal_tasks()
+    {
+        return $this->hasMany('App\Models\Task', 'assignee_id');
+    }
+
 }

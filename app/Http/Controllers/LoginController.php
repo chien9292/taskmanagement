@@ -33,7 +33,7 @@ class LoginController extends Controller
                     "message" => "success",
                     'token' => $token,
                     'role' => consts('user.role.admin').'',
-                    'id' => $user->id,
+                    'id' => $user->id.'',
                     'name' => $user->name
                 ]
             );

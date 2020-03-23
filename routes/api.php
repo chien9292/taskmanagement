@@ -29,5 +29,7 @@ Route::post('/user/store', 'UserController@store')->middleware('auth:api', 'scop
 Route::put('/user/{user}', 'UserController@update')->middleware('auth:api', 'scope:1,2');//Admin update, Manager assign to group
 Route::delete('/user/{user}', 'UserController@destroy')->middleware('auth:api', 'scope:1');//Admin delete user
 
+Route::get('/task/{user}', 'TaskController@index')->middleware('auth:api');//Get personal task
 Route::post('/task/store', 'TaskController@store')->middleware('auth:api');//Admin, Manager, Employee creates task
-Route::put('/user/task/{task}', 'TaskController@update')->middleware('auth:api', 'scope:3');//Update task by user
+
+// Route::put('/user/task/{task}', 'TaskController@update')->middleware('auth:api', 'scope:3');//Update task by user

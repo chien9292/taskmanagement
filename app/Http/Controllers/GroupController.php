@@ -34,7 +34,15 @@ class GroupController extends Controller
             'created_by' => Auth::user()->id,
             'updated_by' => Auth::user()->id,
         ])->all(); 
-        $group->create($data);
+        $createdGroup = $group->create($data);
+        //update manager
+        if (request('manager_id')) {
+            User::where('id', request('manager_id'))->update(['group_id' => $createdGroup->id, 'updated_by' => Auth::user()->id,]);
+        }
+        //update members
+        if (request('members')) {
+            User::whereIn('id', request('members'))->update(['group_id' => $createdGroup->id, 'updated_by' => Auth::user()->id,]);
+        }
         return response()->json([
             'message' => 'success'
         ]);
@@ -65,9 +73,13 @@ class GroupController extends Controller
             'updated_by' => Auth::user()->id,
         ])->all(); 
         $group->update($data);
-        //update user
+        //update manager
         if (request('manager_id')) {
-            User::where('id', request('manager_id'))->update(['group_id' => $group->id]);
+            User::where('id', request('manager_id'))->update(['group_id' => $group->id, 'updated_by' => Auth::user()->id,]);
+        }
+        //update members
+        if (request('members')) {
+            User::whereIn('id', request('members'))->update(['group_id' => $group->id, 'updated_by' => Auth::user()->id,]);
         }
     }
 
