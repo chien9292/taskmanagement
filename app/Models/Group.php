@@ -28,7 +28,7 @@ class Group extends Model
      */
     public function manager()
     {
-        return $this->belongTo('App\Models\User', 'manager_id');
+        return $this->belongsTo('App\Models\User', 'manager_id');
     }
 
 }

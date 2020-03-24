@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\User\CreateRequest;
 use App\Http\Requests\User\UpdateRequest;
 use App\Http\Resources\UserResource;
+use App\Models\Group;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,20 +17,28 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function users()
+    public function users($role)
     {
         if (Auth::user()->role == consts('user.role.manager')) {
             $users = User::where('group_id', Auth::user()->managed_group)->get();
         } else {
-            $users = User::all();
+            switch ($role) {
+                //search available manager to assign to a group
+                case 'manager':
+                    $assigned_managers = Group::whereNotNull('manager_id')->get(['manager_id']);
+                    $users = User::where('role', '2')->whereNotIn('id', $assigned_managers)->get();
+                    break;
+                //search available employee to assign to a group
+                case 'employee':
+                    $users = User::where('role', '3')->where('group_id', null)->get();
+                    break;
+                default:
+                    $users = User::where('role', '!=', '1')->get();
+                    break;
+            }
         }
-        return response()->json([
-            "messsage" => "success",
-            UserResource::collection($users)
-        ]);
+        return UserResource::collection($users);
     }
-
-    
 
     /**
      * Store a newly created resource in storage.
@@ -55,9 +64,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        //
+        return new UserResource($user);
     }
 
     /**
@@ -71,7 +80,7 @@ class UserController extends Controller
     {
         $data = $request->merge([
             'updated_by' => Auth::user()->id,
-        ])->all(); 
+        ])->all();
         $user->update($data);
     }
 
@@ -85,6 +94,7 @@ class UserController extends Controller
     {
         if (!($user->group()->first()) && !($user->managed_group()->first())) {
             $user->delete();
+            $user->update(['updated_by' => Auth::user()->id]);
             return response()->json([
                 "message" => "success"
             ]);

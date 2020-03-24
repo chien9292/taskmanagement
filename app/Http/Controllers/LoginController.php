@@ -25,15 +25,15 @@ class LoginController extends Controller
         ])) {
             $user = Auth::user();
             //create access_token
-            $token = $user->createToken('task', [$user->role.''])->accessToken;
+            $token = $user->createToken('task', [$user->role . ''])->accessToken;
             //update push_token
             $user->update(['push_token', $request->get('push_token')]);
             return response()->json(
                 [
                     "message" => "success",
                     'token' => $token,
-                    'role' => consts('user.role.admin').'',
-                    'id' => $user->id.'',
+                    'role' => consts('user.role.admin') . '',
+                    'id' => $user->id . '',
                     'name' => $user->name
                 ]
             );
@@ -44,6 +44,16 @@ class LoginController extends Controller
                 ]
             );
         }
+    }
+
+    //Authorize user by access token
+    public function checkToken()
+    {
+        return response()->json(
+            [
+                "message" => "success",
+            ]
+        );
     }
 
     /**

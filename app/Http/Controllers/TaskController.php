@@ -17,9 +17,9 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(User $user)
+    public function index()
     {
-        $tasks = $user->personal_tasks;
+        $tasks = Auth::user()->personal_tasks;
         return TaskResource::collection($tasks);
     }
 

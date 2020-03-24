@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Group\CreateRequest;
 use App\Http\Requests\Group\UpdateRequest;
+use App\Http\Resources\GroupResource;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,7 +20,8 @@ class GroupController extends Controller
      */
     public function index()
     {
-        //
+        $groups = Group::all();
+        return GroupResource::collection($groups);
     }
 
     /**
@@ -37,7 +39,7 @@ class GroupController extends Controller
         $createdGroup = $group->create($data);
         //update manager
         if (request('manager_id')) {
-            User::where('id', request('manager_id'))->update(['group_id' => $createdGroup->id, 'updated_by' => Auth::user()->id,]);
+            // User::where('id', request('manager_id'))->update(['group_id' => $createdGroup->id, 'updated_by' => Auth::user()->id,]);
         }
         //update members
         if (request('members')) {
@@ -75,12 +77,16 @@ class GroupController extends Controller
         $group->update($data);
         //update manager
         if (request('manager_id')) {
-            User::where('id', request('manager_id'))->update(['group_id' => $group->id, 'updated_by' => Auth::user()->id,]);
+            // User::where('id', request('manager_id'))->update(['group_id' => $group->id, 'updated_by' => Auth::user()->id,]);
         }
         //update members
         if (request('members')) {
+            User::where('group_id', $group->id)->update(['group_id' => null]);
             User::whereIn('id', request('members'))->update(['group_id' => $group->id, 'updated_by' => Auth::user()->id,]);
         }
+        return response()->json([
+            'message' => 'success'
+        ]);
     }
 
     /**
